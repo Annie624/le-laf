@@ -61,8 +61,8 @@ items[6][3] = 0 #Can be recycled
 RECYCLING_BIN_HEIGHT = 50
 RECYCLING_BIN_IMAGE = pygame.image.load('./mycollection[6188]/png/001-recycle-bin.png')
 RECYCLING_BIN = pygame.transform.rotate(pygame.transform.scale(RECYCLING_BIN_IMAGE, (RECYCLING_BIN_WIDTH, RECYCLING_BIN_HEIGHT)), 0)
-
-itemRect = [None] * 50
+recycle = pygame.Rect(300, 300, RECYCLING_BIN_WIDTH, RECYCLING_BIN_HEIGHT)
+itemRect = [None] * 500
 global points
 points = 0
 def collision(item, bin):
@@ -74,37 +74,30 @@ def collision(item, bin):
         print("Boo!")
     
 
-def draw_window(newObjectX):
+def draw_window(newObjectX, direction):
     
     fall = 1
     
     WIN.fill(WHITE)
     
-    recycle = pygame.Rect(300, 300, RECYCLING_BIN_WIDTH, RECYCLING_BIN_HEIGHT)
+    recycle.x += direction * 5
     WIN.blit(RECYCLING_BIN, (recycle.x, recycle.y))
     boo = -1
-    boo2 = -1
     j = 0
     for i in fallingObjects:
-        
-        
         if j == len(fallingObjects) - 1 and newObjectX != -1:
                 itemRect[j] = pygame.Rect(newObjectX, 50, i[0], i[1])
-                print(itemRect)
         itemRect[j].y += fall
         WIN.blit(i[2], (itemRect[j].x, itemRect[j].y))
         if (((itemRect[j].x-recycle.x)**2 + (itemRect[j].y-recycle.y)**2)**0.5 < 30):
             collision(fallingObjects[j], 0)
             boo = j
         if itemRect[j].y > 550:
-            boo2 = j
+            boo = j
         j = j + 1
     if (boo != -1):
         fallingObjects.pop(boo)
         itemRect.pop(boo)
-    if (boo2 != -1):
-        fallingObjects.pop(boo2)
-        itemRect.pop(boo2)
     pygame.display.update()
     newObjectX = -1
     return newObjectX
@@ -120,14 +113,20 @@ timer = 0
 numFallingObjects = 0
 fallingObjects = []
 newObjectX = -1
+direction = 0
 while run:
     clock.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                direction = -1
+            if event.key == pygame.K_RIGHT:
+                direction = 1
     timer += clock.get_time()
     if timer > increment:
         fallingObjects.append(items[random.randint(0, 6)])
         newObjectX = random.randint(0, 400)
         increment = increment + 1000
-    newObjectX = draw_window(newObjectX)
+    newObjectX = draw_window(newObjectX, direction)
