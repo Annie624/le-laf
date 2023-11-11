@@ -62,39 +62,61 @@ RECYCLING_BIN_HEIGHT = 50
 RECYCLING_BIN_IMAGE = pygame.image.load('./mycollection[6188]/png/001-recycle-bin.png')
 RECYCLING_BIN = pygame.transform.rotate(pygame.transform.scale(RECYCLING_BIN_IMAGE, (RECYCLING_BIN_WIDTH, RECYCLING_BIN_HEIGHT)), 0)
 
-itemRect = [None] * 30
+itemRect = [None] * 50
+global points
+points = 0
+def collision(item, bin):
+    if bin == item[3]:
+        global points
+        points = points + 1
+        print("Nice one!")
+    else:
+        print("Boo!")
+    
+
 def draw_window(newObjectX):
     
     fall = 1
     
     WIN.fill(WHITE)
+    
+    recycle = pygame.Rect(300, 300, RECYCLING_BIN_WIDTH, RECYCLING_BIN_HEIGHT)
     WIN.blit(RECYCLING_BIN, (recycle.x, recycle.y))
+    boo = -1
+    boo2 = -1
     j = 0
     for i in fallingObjects:
-    
+        
         
         if j == len(fallingObjects) - 1 and newObjectX != -1:
-                print(str(newObjectX))
-                print(str(WIDTH - 50))
-                print(str(i[0]))
-                print(str(i[1]))
-                itemRect[j] = pygame.Rect(newObjectX, 350, i[0], i[1])
-                print("HELLO WORLD")
+                itemRect[j] = pygame.Rect(newObjectX, 50, i[0], i[1])
+                print(itemRect)
         itemRect[j].y += fall
         WIN.blit(i[2], (itemRect[j].x, itemRect[j].y))
+        if (((itemRect[j].x-recycle.x)**2 + (itemRect[j].y-recycle.y)**2)**0.5 < 30):
+            collision(fallingObjects[j], 0)
+            boo = j
+        if itemRect[j].y > 550:
+            boo2 = j
         j = j + 1
+    if (boo != -1):
+        fallingObjects.pop(boo)
+        itemRect.pop(boo)
+    if (boo2 != -1):
+        fallingObjects.pop(boo2)
+        itemRect.pop(boo2)
     pygame.display.update()
     newObjectX = -1
     return newObjectX
 
-recycle = pygame.Rect(300, 300, RECYCLING_BIN_WIDTH, RECYCLING_BIN_HEIGHT)
+
 
 
 
 clock = pygame.time.Clock()
-increment = 6000
-timer = 0
+increment = 4000
 run = True
+timer = 0
 numFallingObjects = 0
 fallingObjects = []
 newObjectX = -1
@@ -107,5 +129,5 @@ while run:
     if timer > increment:
         fallingObjects.append(items[random.randint(0, 6)])
         newObjectX = random.randint(0, 400)
-        increment = increment + 5000
+        increment = increment + 1000
     newObjectX = draw_window(newObjectX)
