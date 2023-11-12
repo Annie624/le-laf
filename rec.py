@@ -319,10 +319,13 @@ def endScreen():
    WIN.blit(BACKGROUND_IMG2, (background.x, background.y))
    surface = BACKGROUND_IMG2
    color = (102, 186, 109)
+   tex = "Score: "+str(points)
+   draw_text(tex, pygame.font.SysFont("Roboto", 30), (200, 100, 100), 700, 15)
    draw_text("BETTER LUCK NEXT TIME! ", pygame.font.SysFont("Roboto", 40), (30, 30, 60), 218, 110)
    draw_text("Here are the items you missed: ", pygame.font.SysFont("Roboto", 35), (30, 30, 60), 218, 160)
    pygame.draw.rect(surface, color, pygame.Rect(100, 100, 600, 400))
    d = -20
+   
    for i in range(0, 3):
        d += 20
        split = messages[itemsMiss[i]].split('#')
@@ -341,17 +344,20 @@ itemsMiss = [None] * 3
 def collision(item, bin):
     global points
     global life
-    
    
     if bin == item[3]:
         ping = mixer.Sound("sounds/coin.wav")
         mixer.Sound.play(ping)
         points = points + 1
+        return False
     else:
         crash = mixer.Sound("sounds/crash.wav")
         mixer.Sound.play(crash)
-        points = points - 1
+        if (points != 0):
+            points -= 1
         life -= 1
+        return True
+        
 def draw_text(text, font, color, x, y):
     img = font.render(text, True, color)
     WIN.blit(img, (x, y))
@@ -432,14 +438,15 @@ def draw_window(newObjectX, direction, binType):
                 itemRect[j] = pygame.Rect(newObjectX, 50, i[0], i[1])
         itemRect[j].y += fall
         WIN.blit(i[2], (itemRect[j].x, itemRect[j].y))
+        boo3 = False
         if (((itemRect[j].x-recycle.x)**2 + (itemRect[j].y-recycle.y)**2)**0.5 < 30):
-                collision(fallingObjects[j], binType)
+                boo3 = collision(fallingObjects[j], binType)
                 boo = j
         if points2 < points:
             draw_text("Nice one!", pygame.font.SysFont("Arial", 30), (30, 30, 60), 220, 220)
             textkeeper = 10000000
             m = True
-        elif points2 > points:
+        elif boo3 == True:
             draw_text("Boo!", pygame.font.SysFont("Arial", 30), (30, 30, 60), 220, 220)
             textkeeper = 1000000
             m = False
@@ -463,6 +470,8 @@ def draw_window(newObjectX, direction, binType):
     if (boo != -1):
         fallingObjects.pop(boo)
         itemRect.pop(boo)
+    tex = "Score: "+str(points)
+    draw_text(tex, pygame.font.SysFont("Roboto", 30), (200, 100, 100), 700, 15)
     pygame.display.update()
     newObjectX = -1
     return newObjectX
@@ -497,6 +506,8 @@ fallingObjects = []
 clock2 = pygame.time.Clock()
 
 def loop():
+    global points
+    points = 0
     global fallingObjects
     increment = 4000
     timer = 0
@@ -507,6 +518,7 @@ def loop():
     global life
 
     while intro:
+        global life
         life = 3
         introScreen()
         clock2.tick(FPS)
@@ -518,10 +530,10 @@ def loop():
                     intro = False
             if event.type == pygame.QUIT:
                 exit(99)
-        mixer.init()
-        mixer.music.load('sounds/song.mp3')
-        mixer.music.set_volume(0.2)
-        mixer.music.play()
+    mixer.init()
+    mixer.music.load('sounds/song.mp3')
+    mixer.music.set_volume(0.2)
+    mixer.music.play()
     clock = pygame.time.Clock()
     while True:
         clock.tick(FPS)
