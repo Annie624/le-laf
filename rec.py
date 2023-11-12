@@ -301,13 +301,13 @@ messages = {
 19:"Full Garbage Bag: Unfortunately, full garbage bags cannot be recycled#and should be disposed of in regular trash bins.",
 20:"Chip Bags/Snack Wrappers: Chip bags and snack wrappers cannot be#recycled and should be thrown away in regular trash bins.",
 21:"Broken Cables/Cords: Broken cables and cords are not recyclable and#should be disposed of in regular trash bins.",
-22:"Markers: Used markers cannot be recycled and should be thrown away#in regular trash bins. Consider looking into marker recycling programs if available in your area.",
+22:"Markers: Used markers cannot be recycled and should be thrown away#in regular trash bins. Consider looking into marker recycling#programs if available in your area.",
 23:"Leftover Food: Instead of discarding, leftover food can be composted,#contributing valuable nutrients to soil.",
 24:"Coffee Grounds: After brewing, coffee grounds are excellent for #composting, enriching the compost with organic matter.",
 25:"Worms: Live worms can be introduced to a compost bin, aiding in the#decomposition process and enhancing nutrient content.",
 26:"Coffee Filter: Compost coffee filters along with coffee grounds,as#they are biodegradable and contribute to compost quality.",
 27:"Grass: Grass clippings from lawn maintenance can be composted,#adding a green component to the compost mix.",
-28:"Cat Litter: Some types of cat litter, particularly those made from#natural materials like wood or corn, can be composted. However, be cautious#and check for specific guidelines, as some cat litters may contain#materials that are not suitable for composting.",
+28:"Cat Litter: Some types of cat litter, particularly those made from#natural materials like wood or corn, can be composted. However, be#cautious and check for specific guidelines, as some cat litters may#contain materials that are not suitable for composting.",
 29:"Soda Can: Easily recyclable in standard bins, soda cans can be turned#into new products.",
 }
 
@@ -320,7 +320,7 @@ def endScreen():
    surface = BACKGROUND_IMG2
    color = (102, 186, 109)
    tex = "Score: "+str(points)
-   draw_text(tex, pygame.font.SysFont("Roboto", 30), (200, 100, 100), 700, 15)
+   draw_text(tex, pygame.font.SysFont("Roboto", 30), (30, 30, 60), 700, 15)
    draw_text("BETTER LUCK NEXT TIME! ", pygame.font.SysFont("Roboto", 40), (30, 30, 60), 218, 110)
    draw_text("Here are the items you missed: ", pygame.font.SysFont("Roboto", 35), (30, 30, 60), 218, 160)
    pygame.draw.rect(surface, color, pygame.Rect(100, 100, 600, 400))
@@ -348,13 +348,12 @@ def collision(item, bin):
     if bin == item[3]:
         ping = mixer.Sound("sounds/coin.wav")
         mixer.Sound.play(ping)
+        ping.set_volume(0.2)
         points = points + 1
         return False
     else:
         crash = mixer.Sound("sounds/crash.wav")
         mixer.Sound.play(crash)
-        if (points != 0):
-            points -= 1
         life -= 1
         return True
         
@@ -408,7 +407,7 @@ def draw_window(newObjectX, direction, binType):
     background = pygame.Rect(0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT)
     WIN.blit(BACKGROUND_IMG, (background.x, background.y))
     if not((recycle.x > 740 and direction == 1) or (recycle.x < 10 and direction == -1)):
-        recycle.x += direction * 5
+        recycle.x += direction * 6
     if binType == 0:
        WIN.blit(RECYCLING_BIN, (recycle.x, recycle.y))
        boo = -1
@@ -466,21 +465,36 @@ def draw_window(newObjectX, direction, binType):
             boo = j
             life -= 1
             itemsMiss[life - 1] = i[4]
+            crash = mixer.Sound("sounds/crash.wav")
+            mixer.Sound.play(crash)
         j = j + 1
     if (boo != -1):
         fallingObjects.pop(boo)
         itemRect.pop(boo)
     tex = "Score: "+str(points)
-    draw_text(tex, pygame.font.SysFont("Roboto", 30), (200, 100, 100), 700, 15)
+    r = 200
+    g = 100
+    b = 100
+    if (points < 51):
+        r = r - points * 4
+        g = g + points * 3
+        b = b - points * 2
+    else:
+        r = r - 50 * 4
+        g = g + 50 * 3
+        b = b - 50 * 2
+    draw_text(tex, pygame.font.SysFont("Roboto", 30), (r, g, b), 700, 15)
     pygame.display.update()
     newObjectX = -1
     return newObjectX
 
 
 def fail():
+    global textkeeper
+    textkeeper = 0
     mixer.music.stop()
     failure = mixer.Sound("sounds/lose.wav")
-    failure.set_volume(0.2)
+    failure.set_volume(0.3)
     mixer.Sound.play(failure)
     global background
     global fallingObjects
@@ -533,7 +547,7 @@ def loop():
     mixer.init()
     mixer.music.load('sounds/song.mp3')
     mixer.music.set_volume(0.2)
-    mixer.music.play()
+    mixer.music.play(-1)
     clock = pygame.time.Clock()
     while True:
         clock.tick(FPS)
@@ -557,7 +571,7 @@ def loop():
         if timer > increment:
             fallingObjects.append(items[random.randint(0, 29)])
             newObjectX = random.randint(0, 740)
-            increment = increment + 2000
+            increment = increment + 2100
         draw_window(newObjectX, direction, binType)
 
 
