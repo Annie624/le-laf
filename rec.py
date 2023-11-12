@@ -12,14 +12,21 @@ pygame.display.set_caption("Recycling Game")
 WHITE = (255, 255, 255)
 FPS = 60
 
-RECYCLING_BIN_WIDTH = 80
+BACKGROUND_WIDTH = 800
+BACKGROUND_HEIGHT = 600
+BACKGROUND_IMG = pygame.image.load('./mycollection[6188]/png/GameBackground (2).png')
+BACKGROUND = pygame.transform.rotate(pygame.transform.scale(BACKGROUND_IMG, (BACKGROUND_WIDTH, BACKGROUND_HEIGHT)), 0)
+
+
+RECYCLING_BIN_WIDTH = 50
 RECYCLING_BIN_HEIGHT = 100
 RECYCLING_BIN_IMAGE = pygame.image.load('./mycollection[6188]/png/001-recycle-bin.png')
 RECYCLING_BIN = pygame.transform.rotate(pygame.transform.scale(RECYCLING_BIN_IMAGE, (RECYCLING_BIN_WIDTH, RECYCLING_BIN_HEIGHT)), 0)
 
+
 items=[None] * 40
 for i in range(40):
-    items[i] = [None] * 4
+   items[i] = [None] * 4
 
 
 
@@ -207,11 +214,17 @@ items[29][3] = 0 #Can be recycled
 RECYCLING_BIN_HEIGHT = 50
 RECYCLING_BIN_IMAGE = pygame.image.load('./mycollection[6188]/png/001-recycle-bin.png')
 RECYCLING_BIN = pygame.transform.rotate(pygame.transform.scale(RECYCLING_BIN_IMAGE, (RECYCLING_BIN_WIDTH, RECYCLING_BIN_HEIGHT)), 0)
-recycle = pygame.Rect(300, 300, RECYCLING_BIN_WIDTH, RECYCLING_BIN_HEIGHT)
+recycle = pygame.Rect(300, 500, RECYCLING_BIN_WIDTH, RECYCLING_BIN_HEIGHT)
 itemRect = [None] * 500
 global points
 points = 0
+global m 
 m = True
+
+
+
+
+
 
 def collision(item, bin):
     global points
@@ -222,16 +235,18 @@ def collision(item, bin):
 def draw_text(text, font, color, x, y):
     img = font.render(text, True, color)
     WIN.blit(img, (x, y))
-global textkeep
-textkeep = 0
+global textkeeper
+textkeeper = 0
 def draw_window(newObjectX, direction):
     global points
-    global textkeep
+    global textkeeper
     points2 = points
     fall = 1
-    
+    global m
     WIN.fill(WHITE)
-    
+    background = pygame.Rect(0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT)
+    WIN.blit(BACKGROUND_IMG, (background.x, background.y))
+
     recycle.x += direction * 5
     WIN.blit(RECYCLING_BIN, (recycle.x, recycle.y))
     boo = -1
@@ -246,14 +261,14 @@ def draw_window(newObjectX, direction):
             boo = j
         if points2 < points:
             draw_text("Nice one!", pygame.font.SysFont("Arial", 30), (30, 30, 60), 220, 220)
-            textkeeper = 500
+            textkeeper = 10000000
             m = True
         elif points2 > points:
             draw_text("Boo!", pygame.font.SysFont("Arial", 30), (30, 30, 60), 220, 220)
             textkeeper = 1000000
             m = False
         else:
-            if points2 == points and textkeep > 0:
+            if points2 == points and textkeeper > 0:
                 textkeeper = textkeeper - 1
                 if m == True:
                     draw_text("Nice one!", pygame.font.SysFont("Arial", 30), (30, 30, 60), 220, 220)
