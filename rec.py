@@ -319,7 +319,8 @@ def endScreen():
    WIN.blit(BACKGROUND_IMG2, (background.x, background.y))
    surface = BACKGROUND_IMG2
    color = (102, 186, 109)
-   draw_text("BETTER LUCK NEXT TIME! ", pygame.font.SysFont("Roboto", 40), (30, 30, 60), 250, 110)
+   draw_text("BETTER LUCK NEXT TIME! ", pygame.font.SysFont("Roboto", 40), (30, 30, 60), 218, 110)
+   draw_text("Here are the items you missed: ", pygame.font.SysFont("Roboto", 35), (30, 30, 60), 218, 160)
    pygame.draw.rect(surface, color, pygame.Rect(100, 100, 600, 400))
    d = -20
    for i in range(0, 3):
@@ -328,7 +329,9 @@ def endScreen():
        for j in range(0, len(split)):
            draw_text(split[j], pygame.font.SysFont("Roboto", 25), (30, 30, 60), 110, 200+d)
            d += 20
+   draw_text("Press ENTER to restart ", pygame.font.SysFont("Roboto", 30), (30, 30, 60), 280, 460)
    pygame.display.update()
+
 
 
 
@@ -474,6 +477,7 @@ def fail():
     global fallingObjects
     fallingObjects = []
     WIN.fill(WHITE)
+    clock = pygame.time.Clock()
     while True:
         clock.tick(FPS)
         for event in pygame.event.get():
@@ -489,7 +493,7 @@ def fail():
 
 global fallingObjects
 fallingObjects = []
-clock = pygame.time.Clock()
+
 clock2 = pygame.time.Clock()
 
 def loop():
@@ -518,6 +522,7 @@ def loop():
         mixer.music.load('sounds/song.mp3')
         mixer.music.set_volume(0.2)
         mixer.music.play()
+    clock = pygame.time.Clock()
     while True:
         clock.tick(FPS)
         for event in pygame.event.get():
