@@ -362,19 +362,15 @@ def draw_window(newObjectX, direction, binType):
     WIN.fill(WHITE)
     background = pygame.Rect(0, 0, BACKGROUND_WIDTH, BACKGROUND_HEIGHT)
     WIN.blit(BACKGROUND_IMG, (background.x, background.y))
-    #if not((recycle.x > 740 and direction == 1) or (recycle.x < 10 and direction == -1)):
-        #recycle.x += direction * 5
-    #WIN.blit(RECYCLING_BIN, (recycle.x, recycle.y))
+    if not((recycle.x > 740 and direction == 1) or (recycle.x < 10 and direction == -1)):
+        recycle.x += direction * 5
     if binType == 0:
-       recycle.x += direction * 5
        WIN.blit(RECYCLING_BIN, (recycle.x, recycle.y))
        boo = -1
     elif binType == 1:
-       recycle.x += direction * 5
        WIN.blit(TRASH_BIN, (recycle.x, recycle.y))
        boo = -1
     else:
-       recycle.x += direction * 5
        WIN.blit(COMPOST, (recycle.x, recycle.y))
        boo = -1
 
@@ -397,8 +393,8 @@ def draw_window(newObjectX, direction, binType):
         itemRect[j].y += fall
         WIN.blit(i[2], (itemRect[j].x, itemRect[j].y))
         if (((itemRect[j].x-recycle.x)**2 + (itemRect[j].y-recycle.y)**2)**0.5 < 30):
-            collision(fallingObjects[j], 0)
-            boo = j
+                collision(fallingObjects[j], binType)
+                boo = j
         if points2 < points:
             draw_text("Nice one!", pygame.font.SysFont("Arial", 30), (30, 30, 60), 220, 220)
             textkeeper = 10000000
@@ -407,6 +403,8 @@ def draw_window(newObjectX, direction, binType):
             draw_text("Boo!", pygame.font.SysFont("Arial", 30), (30, 30, 60), 220, 220)
             textkeeper = 1000000
             m = False
+            if (life < 0):
+                life = 0
             itemsMiss[life - 1] = i[4]
         else:
             if points2 == points and textkeeper > 0:
@@ -442,10 +440,10 @@ def fail():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     return 0 
-        c = 0
+        d = 0
         for i in range(0, 3):
-            draw_text(messages[itemsMiss[i]], pygame.font.SysFont("Arial", 20), (30, 30, 60), 110+c, 220)
-            c += 30
+            draw_text(messages[itemsMiss[i]], pygame.font.SysFont("Arial", 20), (30, 30, 60), 110, 110+d)
+            d += 40
         pygame.display.update()
 
         
@@ -456,15 +454,16 @@ clock = pygame.time.Clock()
 clock2 = pygame.time.Clock()
 
 def loop():
-    print("HSL")
     increment = 4000
     timer = 0
     intro = True
     newObjectX = -1
     direction = 0
     binType = 0
+    global life
 
     while intro:
+        life = 3
         introScreen()
         clock2.tick(FPS)
         for event in pygame.event.get():
@@ -473,9 +472,8 @@ def loop():
                     WIN.fill(WHITE)
                     pygame.display.update()
                     intro = False
-                if event.type == pygame.QUIT:
-                    exit(99)
-
+            if event.type == pygame.QUIT:
+                exit(99)
     while True:
         clock.tick(FPS)
         for event in pygame.event.get():
@@ -492,19 +490,18 @@ def loop():
                     binType = 1
                 if event.key == pygame.K_3:
                     binType = 2
-
+        print(str(life))
         if life <= 0:
             return 0
         timer += clock.get_time()
         if timer > increment:
             fallingObjects.append(items[random.randint(0, 29)])
             newObjectX = random.randint(0, 740)
-            increment = increment + 1000
+            increment = increment + 2000
         draw_window(newObjectX, direction, binType)
 
 
 while True:
-    print("FHS")
     a = loop()
     if a == 1:
         exit(0)
@@ -513,4 +510,3 @@ while True:
         if b == 1:
             exit(0)
         a = 1
-        print("YAH")
