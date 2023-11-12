@@ -261,7 +261,7 @@ global m
 m = True
 
 
-mixer.init()
+
 
 
 
@@ -297,19 +297,20 @@ messages = {
 15:"CDs: Donate or sell old CDs to minimize waste, as they are not#recyclable in regular bins.",
 16:"Clothing: Instead of discarding, donate or sell clothing to extend its#use and reduce overall waste.",
 17:"Refrigerators: Contact a household waste recycling center for proper#disposal, as refrigerators can't be recycled in standard bins.",
-18:"Batteries: Take batteries to designated collection points, like local#Lowes or Home Depot, to ensure safe disposal. Avoid throwing them in regular bins.",
+18:"Batteries: Take batteries to designated collection points, like local#Lowes or Home Depot, to ensure safe disposal. Avoid throwing#them in regular bins.",
 19:"Full Garbage Bag: Unfortunately, full garbage bags cannot be recycled#and should be disposed of in regular trash bins.",
 20:"Chip Bags/Snack Wrappers: Chip bags and snack wrappers cannot be#recycled and should be thrown away in regular trash bins.",
-21:"Broken Cables/Cords: Broken cables and cords are not recyclable and should#be disposed of in regular trash bins.",
-22:"Markers: Used markers cannot be recycled and should be thrown away in#regular trash bins. Consider looking into marker recycling programs if available in your area.",
+21:"Broken Cables/Cords: Broken cables and cords are not recyclable and#should be disposed of in regular trash bins.",
+22:"Markers: Used markers cannot be recycled and should be thrown away#in regular trash bins. Consider looking into marker recycling programs if available in your area.",
 23:"Leftover Food: Instead of discarding, leftover food can be composted,#contributing valuable nutrients to soil.",
 24:"Coffee Grounds: After brewing, coffee grounds are excellent for #composting, enriching the compost with organic matter.",
 25:"Worms: Live worms can be introduced to a compost bin, aiding in the#decomposition process and enhancing nutrient content.",
 26:"Coffee Filter: Compost coffee filters along with coffee grounds,as#they are biodegradable and contribute to compost quality.",
-27:"Grass: Grass clippings from lawn maintenance can be composted, adding#a green component to the compost mix.",
-28:"Cat Litter: Some types of cat litter, particularly those made from#natural materials like wood or corn, can be composted. However, be cautious and check for#specific guidelines, as some cat litters may contain materials that are not#suitable for composting.",
+27:"Grass: Grass clippings from lawn maintenance can be composted,#adding a green component to the compost mix.",
+28:"Cat Litter: Some types of cat litter, particularly those made from#natural materials like wood or corn, can be composted. However, be cautious#and check for specific guidelines, as some cat litters may contain#materials that are not suitable for composting.",
 29:"Soda Can: Easily recyclable in standard bins, soda cans can be turned#into new products.",
 }
+
 
 
 def endScreen():
@@ -337,9 +338,15 @@ itemsMiss = [None] * 3
 def collision(item, bin):
     global points
     global life
+    
+   
     if bin == item[3]:
+        ping = mixer.Sound("sounds/coin.wav")
+        mixer.Sound.play(ping)
         points = points + 1
     else:
+        crash = mixer.Sound("sounds/crash.wav")
+        mixer.Sound.play(crash)
         points = points - 1
         life -= 1
 def draw_text(text, font, color, x, y):
@@ -351,31 +358,32 @@ global background
 background =  background = pygame.Rect(0, 0, BACKGROUND_WIDTH, 1000)
 
 def introScreen():
-   WIN.fill(WHITE)
-   background = pygame.Rect(0, 0, BACKGROUND_WIDTH2, BACKGROUND_HEIGHT2)
-   WIN.blit(BACKGROUND_IMG2, (background.x, background.y))
-   surface = BACKGROUND_IMG2
-   color = (102, 186, 109)
-   pygame.draw.rect(surface, color, pygame.Rect(100, 100, 600, 400))
-   draw_text("WELCOME TO ECOSORT! ", pygame.font.SysFont("Roboto", 40), (30, 30, 60), 250, 110)
-   draw_text("Your mission is to guide our eco-hero through various levels, sorting waste into the", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 150)
-   draw_text("correct bins - Recyclable, Compostable, and Trash. Each correct descision helps protect the", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 165)
-   draw_text("environment and earns you points, but beware of any sorting mistakes that could destroy ", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 180)
-   draw_text("your 3 Earth lives!", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 195)
-   draw_text("SORTING GUIDLINES", pygame.font.SysFont("Roboto", 25), (30, 30, 60), 320, 225)
-   draw_text("Recyclables:", pygame.font.SysFont("Roboto", 23), (30, 30, 60), 110, 245)
-   draw_text("Items in this category consist of plastics, paper, and cardboard. Some other items may not", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 265)
-   draw_text("be any of those, but can be “upcycled”, or donated. Put these in recycling.", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 280)
-   draw_text("Compost:", pygame.font.SysFont("Roboto", 23), (30, 30, 60), 110, 300)
-   draw_text("Food scraps, yard waste, and other objects that are able to break down into organic ", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 320)
-   draw_text("materials fit in this category", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 335)
-   draw_text("Trash:", pygame.font.SysFont("Roboto", 23), (30, 30, 60), 110, 355)
-   draw_text("Some plastics, such as food wrappers cannot be recycled and must be thrown away. Also", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 375)
-   draw_text("consider items that are broken or too mixed together to be recycled or composted.", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 390)
-   draw_text("CONTROLS", pygame.font.SysFont("Roboto", 25), (30, 30, 60), 350, 420)
-   draw_text("Use the left and right arrow keys to catch the item in their respective can. Use the space", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 445)
-   draw_text("to switch between the recycling, trash, and compost bins. Press ENTER to begin!", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 460)
-   pygame.display.update()
+  WIN.fill(WHITE)
+  background = pygame.Rect(0, 0, BACKGROUND_WIDTH2, BACKGROUND_HEIGHT2)
+  WIN.blit(BACKGROUND_IMG2, (background.x, background.y))
+  surface = BACKGROUND_IMG2
+  color = (102, 186, 109)
+  pygame.draw.rect(surface, color, pygame.Rect(100, 100, 600, 400))
+  draw_text("WELCOME TO ECOSORT! ", pygame.font.SysFont("Roboto", 40), (30, 30, 60), 250, 110)
+  draw_text("Your mission is to guide our eco-hero through various levels, sorting waste into the", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 150)
+  draw_text("correct bins - Recyclable, Compostable, and Trash. Each correct descision helps protect the", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 165)
+  draw_text("environment and earns you points, but beware of any sorting mistakes that could destroy ", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 180)
+  draw_text("your 3 Earth lives!", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 195)
+  draw_text("SORTING GUIDLINES", pygame.font.SysFont("Roboto", 25), (30, 30, 60), 320, 225)
+  draw_text("Recyclables:", pygame.font.SysFont("Roboto", 23), (30, 30, 60), 110, 245)
+  draw_text("Items in this category consist of plastics, paper, and cardboard. Some other items may not", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 265)
+  draw_text("be any of those, but can be “upcycled”, or donated. Put these in recycling.", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 280)
+  draw_text("Compost:", pygame.font.SysFont("Roboto", 23), (30, 30, 60), 110, 300)
+  draw_text("Food scraps, yard waste, and other objects that are able to break down into organic ", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 320)
+  draw_text("materials fit in this category", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 335)
+  draw_text("Trash:", pygame.font.SysFont("Roboto", 23), (30, 30, 60), 110, 355)
+  draw_text("Some plastics, such as food wrappers cannot be recycled and must be thrown away. Also", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 375)
+  draw_text("consider items that are broken or too mixed together to be recycled or composted.", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 390)
+  draw_text("CONTROLS", pygame.font.SysFont("Roboto", 25), (30, 30, 60), 350, 420)
+  draw_text("Use the left and right arrow keys to catch the item in their respective can. To switch bins,", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 445)
+  draw_text("1 = recycling, 2 = trash, and 3 = compost. Press ENTER to begin!", pygame.font.SysFont("Roboto", 20), (30, 30, 60), 110, 460)
+  pygame.display.update()
+
 
 
 
@@ -459,6 +467,9 @@ def draw_window(newObjectX, direction, binType):
 
 def fail():
     mixer.music.stop()
+    failure = mixer.Sound("sounds/lose.wav")
+    failure.set_volume(0.2)
+    mixer.Sound.play(failure)
     global background
     global fallingObjects
     fallingObjects = []
@@ -503,6 +514,7 @@ def loop():
                     intro = False
             if event.type == pygame.QUIT:
                 exit(99)
+        mixer.init()
         mixer.music.load('sounds/song.mp3')
         mixer.music.set_volume(0.2)
         mixer.music.play()
