@@ -1,4 +1,5 @@
 import pygame
+from pygame import mixer
 import sys
 import random
 
@@ -260,6 +261,12 @@ global m
 m = True
 
 
+mixer.init()
+
+
+
+
+
 global life
 life = 3
 EARTH_WIDTH = 50
@@ -272,37 +279,58 @@ earth3 = pygame.Rect(125, 5, EARTH_WIDTH, EARTH_HEIGHT)
 
 
 messages = {
-0:"Newspaper: Easily recyclable in standard bins, newspapers contribute to a sustainable cycle when disposed of properly.",
-1:"Cardboard boxes: Place these in regular recycling bins to transform them into new products and minimize environmental impact.",
-2:"Plastic Containers: Conveniently recyclable in standard bins, these containers can be transformed into new items.",
-3:"Water bottle: Dispose of in a regular recycling bin to give plastic bottles a chance to be repurposed.",
-4:"Soup Can: Recycle in a standard bin to support the recycling process and reduce the need for new materials.",
-5:"Aluminum: Place aluminum items in regular recycling bins to contribute to the recycling loop.",
-6:"Wine Bottle: Recyclable in regular bins, wine bottles can be transformed into new glass products.",
-7:"Smartphone: While not recyclable in regular bins, consider donating or selling old smartphones to reduce electronic waste.",
-8:"Notebooks: Recyclable in standard bins, notebooks contribute to sustainable paper usage.",
-9:"Textbooks: Place old textbooks in regular recycling bins to promote responsible disposal.",
-10:"Wood: Take wood to recycling centers or repurpose it for building, as it can't be put in household recycling bins.",
-11:"Bubble Wrap: Specific bins at grocery stores are designed for plastic bag and bubble wrap recycling, ensuring responsible disposal.",
-12:"Plastic Bag: Utilize designated bins for plastic bags, as they can't be recycled in standard recycling bins.",
-13:"Broken Glass: Separate broken glass from other recyclables and place it in a designated box for safe collection.",
-14:"VHS Tape: While it cannot be placed in a recycling bin, consider donating or selling old VHS tapes to reduce waste, as they can't be recycled in regular bins.",
-15:"CDs: Donate or sell old CDs to minimize waste, as they are not recyclable in regular bins.",
-16:"Clothing: Instead of discarding, donate or sell clothing to extend its use and reduce overall waste.",
-17:"Refrigerators: Contact a household waste recycling center for proper disposal, as refrigerators can't be recycled in standard bins.",
-18:"Batteries: Take batteries to designated collection points, like local Lowes or Home Depot, to ensure safe disposal. Avoid throwing them in regular bins.",
-19:"Full Garbage Bag: Unfortunately, full garbage bags cannot be recycled and should be disposed of in regular trash bins.",
-20:"Chip Bags/Snack Wrappers: Chip bags and snack wrappers cannot be recycled and should be thrown away in regular trash bins.",
-21:"Broken Cables/Cords: Broken cables and cords are not recyclable and should be disposed of in regular trash bins.",
-22:"Markers: Used markers cannot be recycled and should be thrown away in regular trash bins. Consider looking into marker recycling programs if available in your area.",
-23:"Leftover Food: Instead of discarding, leftover food can be composted, contributing valuable nutrients to soil.",
-24:"Coffee Grounds: After brewing, coffee grounds are excellent for composting, enriching the compost with organic matter.",
-25:"Worms: Live worms can be introduced to a compost bin, aiding in the decomposition process and enhancing nutrient content.",
-26:"Coffee Filter: Compost coffee filters along with coffee grounds, as they are biodegradable and contribute to compost quality.",
-27:"Grass: Grass clippings from lawn maintenance can be composted, adding a green component to the compost mix.",
-28:"Cat Litter: Some types of cat litter, particularly those made from natural materials like wood or corn, can be composted. However, be cautious and check for specific guidelines, as some cat litters may contain materials that are not suitable for composting.",
-29:"Soda Can: Easily recyclable in standard bins, soda cans can be turned into new products.",
+0:"Newspaper: Easily recyclable in standard bins, newspapers contribute#to a sustainable cycle when disposed of properly.",
+1:"Cardboard boxes: Place these in regular recycling bins to transform#them into new products and minimize environmental impact.",
+2:"Plastic Containers: Conveniently recyclable in standard bins, these#containers can be transformed into new items.",
+3:"Water bottle: Dispose of in a regular recycling bin to give plastic#bottles a chance to be repurposed.",
+4:"Soup Can: Recycle in a standard bin to support the recycling process#and reduce the need for new materials.",
+5:"Aluminum: Place aluminum items in regular recycling bins to contribute#to the recycling loop.",
+6:"Wine Bottle: Recyclable in regular bins, wine bottles can be#transformed into new glass products.",
+7:"Smartphone: While not recyclable in regular bins, consider donating or#selling old smartphones to reduce electronic waste.",
+8:"Notebooks: Recyclable in standard bins, notebooks contribute to#sustainable paper usage.",
+9:"Textbooks: Place old textbooks in regular recycling bins to promote#responsible disposal.",
+10:"Wood: Take wood to recycling centers or repurpose it for building,#as it can't be put in household recycling bins.",
+11:"Bubble Wrap: Specific bins at grocery stores are designed for plastic#bag and bubble wrap recycling, ensuring responsible disposal.",
+12:"Plastic Bag: Utilize designated bins for plastic bags, as they can't#be recycled in standard recycling bins.",
+13:"Broken Glass: Separate broken glass from other recyclables and place#it in a designated box for safe collection.",
+14:"VHS Tape: While it cannot be placed in a recycling bin, consider#donating or selling old VHS tapes to reduce waste, as they can't#be recycled in regular bins.",
+15:"CDs: Donate or sell old CDs to minimize waste, as they are not#recyclable in regular bins.",
+16:"Clothing: Instead of discarding, donate or sell clothing to extend its#use and reduce overall waste.",
+17:"Refrigerators: Contact a household waste recycling center for proper#disposal, as refrigerators can't be recycled in standard bins.",
+18:"Batteries: Take batteries to designated collection points, like local#Lowes or Home Depot, to ensure safe disposal. Avoid throwing them in regular bins.",
+19:"Full Garbage Bag: Unfortunately, full garbage bags cannot be recycled#and should be disposed of in regular trash bins.",
+20:"Chip Bags/Snack Wrappers: Chip bags and snack wrappers cannot be#recycled and should be thrown away in regular trash bins.",
+21:"Broken Cables/Cords: Broken cables and cords are not recyclable and should#be disposed of in regular trash bins.",
+22:"Markers: Used markers cannot be recycled and should be thrown away in#regular trash bins. Consider looking into marker recycling programs if available in your area.",
+23:"Leftover Food: Instead of discarding, leftover food can be composted,#contributing valuable nutrients to soil.",
+24:"Coffee Grounds: After brewing, coffee grounds are excellent for #composting, enriching the compost with organic matter.",
+25:"Worms: Live worms can be introduced to a compost bin, aiding in the#decomposition process and enhancing nutrient content.",
+26:"Coffee Filter: Compost coffee filters along with coffee grounds,as#they are biodegradable and contribute to compost quality.",
+27:"Grass: Grass clippings from lawn maintenance can be composted, adding#a green component to the compost mix.",
+28:"Cat Litter: Some types of cat litter, particularly those made from#natural materials like wood or corn, can be composted. However, be cautious and check for#specific guidelines, as some cat litters may contain materials that are not#suitable for composting.",
+29:"Soda Can: Easily recyclable in standard bins, soda cans can be turned#into new products.",
 }
+
+
+def endScreen():
+   WIN.fill(WHITE)
+   background = pygame.Rect(0, 0, BACKGROUND_WIDTH2, BACKGROUND_HEIGHT2)
+   WIN.blit(BACKGROUND_IMG2, (background.x, background.y))
+   surface = BACKGROUND_IMG2
+   color = (102, 186, 109)
+   draw_text("BETTER LUCK NEXT TIME! ", pygame.font.SysFont("Roboto", 40), (30, 30, 60), 250, 110)
+   pygame.draw.rect(surface, color, pygame.Rect(100, 100, 600, 400))
+   d = -20
+   for i in range(0, 3):
+       d += 20
+       split = messages[itemsMiss[i]].split('#')
+       for j in range(0, len(split)):
+           draw_text(split[j], pygame.font.SysFont("Roboto", 25), (30, 30, 60), 110, 200+d)
+           d += 20
+   pygame.display.update()
+
+
+
 
 
 itemsMiss = [None] * 3
@@ -355,7 +383,7 @@ def draw_window(newObjectX, direction, binType):
     global points
     global textkeeper
     global life
-    points2 = points
+    global fallingObjects
     fall = 1
     global m
     global background
@@ -380,14 +408,15 @@ def draw_window(newObjectX, direction, binType):
         WIN.blit(EARTH, (earth2.x, earth2.y))
         WIN.blit(EARTH, (earth3.x, earth3.y))
     elif life == 2:
+        WIN.blit(EARTH, (earth1.x, earth1.y))
         WIN.blit(EARTH, (earth2.x, earth2.y))
-        WIN.blit(EARTH, (earth3.x, earth3.y))
     elif life == 1:
         WIN.blit(EARTH, (earth1.x, earth1.y))
         
     boo = -1
     j = 0
     for i in fallingObjects:
+        points2 = points
         if j == len(fallingObjects) - 1 and newObjectX != -1:
                 itemRect[j] = pygame.Rect(newObjectX, 50, i[0], i[1])
         itemRect[j].y += fall
@@ -429,7 +458,9 @@ def draw_window(newObjectX, direction, binType):
 
 
 def fail():
+    mixer.music.stop()
     global background
+    global fallingObjects
     fallingObjects = []
     WIN.fill(WHITE)
     while True:
@@ -438,22 +469,20 @@ def fail():
             if event.type == pygame.QUIT:
                 return 1
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_RETURN:
                     return 0 
-        d = 0
-        for i in range(0, 3):
-            draw_text(messages[itemsMiss[i]], pygame.font.SysFont("Arial", 20), (30, 30, 60), 110, 110+d)
-            d += 40
-        pygame.display.update()
+        endScreen()
 
         
 
 
+global fallingObjects
 fallingObjects = []
 clock = pygame.time.Clock()
 clock2 = pygame.time.Clock()
 
 def loop():
+    global fallingObjects
     increment = 4000
     timer = 0
     intro = True
@@ -474,6 +503,9 @@ def loop():
                     intro = False
             if event.type == pygame.QUIT:
                 exit(99)
+        mixer.music.load('sounds/song.mp3')
+        mixer.music.set_volume(0.2)
+        mixer.music.play()
     while True:
         clock.tick(FPS)
         for event in pygame.event.get():
@@ -490,7 +522,6 @@ def loop():
                     binType = 1
                 if event.key == pygame.K_3:
                     binType = 2
-        print(str(life))
         if life <= 0:
             return 0
         timer += clock.get_time()
